@@ -1,0 +1,13 @@
+from .. import loader from telethon import events import logging
+
+logger = logging.getLogger(name)
+
+version = (1, 0, 0) author = "ChatGPT"
+
+Простой список слов — для примера 
+
+WORDS = [ "арбуз", "зебра", "автомобиль", "лампа", "апельсин", "носорог", "газета", "ананас", "собака", "арбуз", "зонт", "трава", "автомат", "текст", "труба" ]
+
+class WordChainMod(loader.Module): """Игра в слова: бот отвечает словом, начинающимся на последнюю букву твоего слова."""
+
+strings = { "name": "WordChain" } def __init__(self): self.last_letter = None async def играcmd(self, message): """Начать игру: .игра <твоё_слово>""" args = message.text.split(maxsplit=1) if len(args) < 2: await message.edit("🔤 Напиши слово: .игра яблоко") return user_word = args[1].strip().lower() self.last_letter = user_word[-1] # Поиск подходящего слова for word in WORDS: if word[0] == self.last_letter: self.last_letter = word[-1] await message.edit(f"Ты: {user_word}\nЯ: {word}") return await message.edit(f"Ты: {user_word}\n🤷 Я не знаю слов на букву '{self.last_letter.upper()}'") 
